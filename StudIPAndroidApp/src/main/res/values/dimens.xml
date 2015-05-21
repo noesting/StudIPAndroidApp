@@ -20,15 +20,19 @@
     <dimen name="shadow_width">15dp</dimen>
     <dimen name="list_item_hor_margin">8dp</dimen>
     <dimen name="list_item_vert_margin">8dp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_micro">12sp</dimen>
+    <dimen name="layout_padding_large">12dp</dimen>
     <dimen name="layout_padding_normal">8dp</dimen>
     <dimen name="layout_padding_small">4dp</dimen>
+    <dimen name="layout_margin_large">12dp</dimen>
     <dimen name="layout_margin_normal">8dp</dimen>
     <dimen name="layout_margin_small">4dp</dimen>
     <dimen name="touch_default_site">48dp</dimen>
 
+    <dimen name="user_image_large">96dp</dimen>
     <dimen name="user_image_medium">64dp</dimen>
 
     <dimen name="preview_image_width">160dp</dimen>
