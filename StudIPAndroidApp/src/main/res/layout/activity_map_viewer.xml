@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<WebView android:id="@+id/pic_view"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </WebView> -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+      <!--  <Button
+            android:id="@+id/choose_building_button"
+            android:background="@color/studip_mobile_dark"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Gebäude 22"
+
+            android:onClick="chooseBuilding"/>
+            -->
+
+        <Button
+            android:id="@+id/choose_floor_button"
+            android:background="@color/studip_mobile_dark"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1. OG"
+
+            android:onClick="chooseFloor"/>
+
+        <Button
+            android:id="@+id/focus_map_button"
+            android:background="@color/studip_mobile_dark"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Auf mich"
+
+            android:onClick="refocus"/>
+
+        <Button
+            android:id="@+id/choose_filter_button"
+            android:background="@color/studip_mobile_dark"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Anzeigefilter"
+
+            android:onClick="chooseFilter"/>
+
+
+    </LinearLayout>
+
+    <de.elanev.studip.android.app.frontend.localization.TouchImageView
+        android:id="@+id/tiv_map"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/close_map_button"
+            android:background="@color/studip_mobile_dark"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="schließen"
+
+            android:onClick="close"/>
+
+    </LinearLayout>
+
+</LinearLayout>

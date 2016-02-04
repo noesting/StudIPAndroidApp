@@ -39,6 +39,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -332,7 +333,12 @@ public class SignInFragment extends ListFragment implements SyncHelper.SyncHelpe
     ObjectMapper mapper = new ObjectMapper();
     Servers servers = null;
     try {
+
+      Log.d(TAG, ServerData.serverJson);
+      System.out.println(ServerData.serverJson);
+
       servers = mapper.readValue(ServerData.serverJson, Servers.class);
+
     } catch (JsonParseException e) {
       e.printStackTrace();
     } catch (IOException e) {

@@ -224,6 +224,7 @@ public class ForumEntriesListFragment extends ReactiveListFragment {
           @Override public void onCompleted() {
             if (mOffset <= 0) {
               mAdapter.clear();
+
             }
             mAdapter.addAll(entries);
             entries.clear();

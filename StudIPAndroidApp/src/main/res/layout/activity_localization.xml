@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/listView1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:drawSelectorOnTop="false"
+            android:background="@android:color/background_dark"
+            android:listSelector="@android:color/darker_gray"/>
+
+        <LinearLayout
+            android:id="@+id/button_cluster"
+            android:layout_below="@id/listView1"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/refresh_button"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Aktualisieren"
+                android:onClick="refresh" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/localize_button"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Lokalisieren"
+                    android:onClick="localize"/>
+
+                <Button
+                    android:id="@+id/show_map_button"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Karte anzeigen"
+                    android:onClick="showMap"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/place_textedit"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:inputType="number"/>
+
+            <Button
+                android:id="@+id/store_button"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Speichern"
+                android:onClick="storePlaceToDB"/>
+
+            <Button
+                android:id="@+id/clear_db_button"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Datenbank leeren"
+                android:onClick="clearDB"
+                android:layout_alignParentBottom="true"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+

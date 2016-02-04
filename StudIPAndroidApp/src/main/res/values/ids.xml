@@ -7,6 +7,7 @@
     <item name="navigation_contacts" type="id" />
     <item name="navigation_planner" type="id" />
     <item name="navigation_profile" type="id" />
+    <item name="navigation_localization" type="id" />
 
     <!-- CourseDocuments -->
     <item name="document_list_wrapper" type="id" />

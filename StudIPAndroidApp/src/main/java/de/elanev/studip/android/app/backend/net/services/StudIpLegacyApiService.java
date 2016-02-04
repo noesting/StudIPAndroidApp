@@ -2,19 +2,25 @@ package de.elanev.studip.android.app.backend.net.services;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.location.Location;
+import android.util.Log;
 
 import org.apache.http.HttpStatus;
 
+import de.elanev.studip.android.app.backend.datamodel.Course;
+import de.elanev.studip.android.app.backend.datamodel.Courses;
 import de.elanev.studip.android.app.backend.datamodel.ForumArea;
 import de.elanev.studip.android.app.backend.datamodel.ForumAreas;
 import de.elanev.studip.android.app.backend.datamodel.ForumCategories;
 import de.elanev.studip.android.app.backend.datamodel.ForumCategory;
 import de.elanev.studip.android.app.backend.datamodel.ForumEntries;
 import de.elanev.studip.android.app.backend.datamodel.ForumEntry;
+import de.elanev.studip.android.app.backend.datamodel.LocationRoom;
 import de.elanev.studip.android.app.backend.datamodel.Server;
 import de.elanev.studip.android.app.backend.datamodel.Settings;
 import de.elanev.studip.android.app.backend.datamodel.User;
 import de.elanev.studip.android.app.backend.datamodel.UserItem;
+import de.elanev.studip.android.app.backend.datamodel.UserLocation;
 import de.elanev.studip.android.app.backend.db.UsersContract;
 import retrofit.Callback;
 import retrofit.ErrorHandler;
@@ -22,6 +28,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.JacksonConverter;
+import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -69,7 +76,7 @@ public class StudIpLegacyApiService {
         .setErrorHandler(new ErrorHandler() {
           @Override public Throwable handleError(RetrofitError cause) {
             Response response = cause.getResponse();
-            if (response.getUrl().contains("user")
+            if (response != null && response.getUrl().contains("user")
                 && cause.getResponse().getStatus() == HttpStatus.SC_NOT_FOUND) {
               return new UserNotFoundException(cause);
             }
@@ -112,23 +119,45 @@ public class StudIpLegacyApiService {
           }
         })
         .flatMap(new Func1<ForumEntry, Observable<ForumEntry>>() {
-          @Override public Observable<ForumEntry> call(ForumEntry entry) {
-            return Observable.zip(Observable.just(entry),
-                getUser(entry.userId),
-                new Func2<ForumEntry, User, ForumEntry>() {
-                  @Override public ForumEntry call(ForumEntry entry, User user) {
-                    entry.user = user;
-                    return entry;
-                  }
-                });
-            //            if (!TextUtils.isEmpty(entry.userId)) {
-            //              User user = getUser(entry.userId);
-            //              entry.user = user;
-            //            }
-            //
-          }
+            @Override
+            public Observable<ForumEntry> call(ForumEntry entry) {
+                return Observable.zip(Observable.just(entry),
+                        getUser(entry.userId),
+                        new Func2<ForumEntry, User, ForumEntry>() {
+                            @Override
+                            public ForumEntry call(ForumEntry entry, User user) {
+                                entry.user = user;
+                                return entry;
+                            }
+                        });
+                //            if (!TextUtils.isEmpty(entry.userId)) {
+                //              User user = getUser(entry.userId);
+                //              entry.user = user;
+                //            }
+                //
+            }
         });
   }
+
+    public Observable<Course> getAllUserCourses(final String userID) {
+        return mService.getAllUserCourses(userID)
+                .flatMap(new Func1<Courses, Observable<? extends Course>>() {
+                    @Override
+                    public Observable<? extends Course> call(Courses courses) {
+                        return Observable.from(courses.courses);
+                    }
+                });
+    }
+
+    public Observable<Course> getAllCourses() {
+        return mService.getAllCourses()
+                .flatMap(new Func1<Courses, Observable<? extends Course>>() {
+                    @Override
+                    public Observable<? extends Course> call(Courses courses) {
+                        return Observable.from(courses.courses);
+                    }
+                });
+    }
 
   public Observable<User> getUser(final String userId) {
     User u = getUserFromContentProvider(userId);
@@ -137,29 +166,35 @@ public class StudIpLegacyApiService {
     }
 
     return mService.getUser(userId).flatMap(new Func1<UserItem, Observable<? extends User>>() {
-      @Override public Observable<? extends User> call(UserItem userItem) {
-        return Observable.just(userItem.user);
-      }
+        @Override
+        public Observable<? extends User> call(UserItem userItem) {
+            return Observable.just(userItem.user);
+        }
     }).onErrorReturn(new Func1<Throwable, User>() {
-      @Override public User call(Throwable throwable) {
-        return new User(null,
-            null,
-            null,
-            null,
-            "Deleted",
-            "User",
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            0);
-      }
+        @Override
+        public User call(Throwable throwable) {
+            return new User(null,
+                    null,
+                    null,
+                    null,
+                    "Deleted",
+                    "User",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    0);
+        }
     });
   }
+
+    public Observable<UserLocation> getLocationRoom(final String userId) {
+        return mService.getLocationRoom(userId);
+    }
 
   private User getUserFromContentProvider(final String userId) {
 
@@ -224,6 +259,17 @@ public class StudIpLegacyApiService {
     return mService.createForumEntry(topicId, entrySubject, entryContent);
   }
 
+  public Observable<UserLocation> storeLocation(final String resourceId,
+                                                final String userId) {
+    //UserLocation locationRoom = new UserLocation(resourceId, userId);
+      Log.d("LegacyService", "Resource id in UserLocation: " + resourceId);
+   return mService.storeLocation(resourceId, userId);
+    //String someString = mService.storeLocation(resourceId, locationRoom).toString();
+    //mService.storeLocation(resourceId, locationRoom);
+    //Log.d("StudIPLegacyService", "someString = " + someString);
+    //return mService.storeLocation(resourceId, locationRoom);
+  }
+
   public void setForumRead(final String courseId, final Callback<ForumCategory> callback) {
     mService.setForumRead(courseId, callback);
   }
@@ -258,6 +304,20 @@ public class StudIpLegacyApiService {
     @GET("/user/{user_id}") Observable<UserItem> getUser(@Path("user_id") String userId);
 
     @GET("/studip/settings") Observable<Settings> getSettings();
+
+    @GET("/user/resource/{user_id}") Observable<UserLocation> getLocationRoom(@Path("user_id") String userID);
+
+    @FormUrlEncoded @POST("/resource/user/{resource_id}") Observable<UserLocation> storeLocation(@Path(
+            "resource_id") String resourceId,
+            @Field("user_id") String userId);
+
+    /*@POST("/resource/user/{resource_id}") Observable<UserLocation> storeLocation(@Path(
+           "resource_id") String resourceId, @Body UserLocation locatoinRoom);*/
+
+    @GET("/user/{user_id}/courses") Observable<Courses>  getAllUserCourses(@Path("user_id") String user_ID);
+
+    @GET("/courses") Observable<Courses> getAllCourses();
+
   }
 
   public static class UserNotFoundException extends RuntimeException {

@@ -2,8 +2,9 @@ package de.elanev.studip.android.app;
 
 import android.annotation.TargetApi;
 import android.app.Application;
+import android.database.sqlite.SQLiteOpenHelper; // VON NILS
 import android.os.Build;
-import android.os.StrictMode;
+//import android.os.StrictMode;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
@@ -16,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import de.elanev.studip.android.app.backend.net.util.OkHttpStack;
+import de.elanev.studip.android.app.frontend.localization.DatabaseHelper;
 import de.elanev.studip.android.app.util.ApiUtils;
 import io.fabric.sdk.android.Fabric;
 import retrofit.client.OkClient;
@@ -42,6 +44,9 @@ public class StudIPApplication extends Application {
   private static StudIPApplication mInstance;
   private RequestQueue mRequestQueue;
 
+  //VON NILS
+  private static SQLiteOpenHelper openHelper;
+
   public static synchronized StudIPApplication getInstance() {
     return mInstance;
   }
@@ -62,7 +67,7 @@ public class StudIPApplication extends Application {
     SQLiteDatabase.loadLibs(this);
 
     // Enable StrictMode for debug builds
-    if (BuildConfig.DEBUG) {
+/*    if (BuildConfig.DEBUG) {
       StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads()
           .detectDiskWrites()
           .detectAll()
@@ -77,7 +82,12 @@ public class StudIPApplication extends Application {
 
       Picasso.with(this).setIndicatorsEnabled(true);
       Picasso.with(this).setLoggingEnabled(true);
-    }
+    }*/
+
+    //VON NILS
+    openHelper = new DatabaseHelper(this);
+    StudIPApplication.getWritableDatabase().execSQL("PRAGMA foreign_keys=ON;");
+
   }
 
   /**
@@ -127,5 +137,13 @@ public class StudIPApplication extends Application {
     if (mRequestQueue != null) mRequestQueue.cancelAll(tag == null ? TAG : tag);
   }
 
+  //VON NILS
+  public static android.database.sqlite.SQLiteDatabase getWritableDatabase() {
+    return openHelper.getWritableDatabase();
+  }
+  //VON NILS
+  public static android.database.sqlite.SQLiteDatabase getReadableDatabase() {
+    return openHelper.getReadableDatabase();
+  }
 
 }
